@@ -15,4 +15,4 @@ EXPOSE 8001
 
 # Set the entry point of the container to the bee command that runs the
 # application and watches for changes
-CMD ["api"]
+CMD ["rest-api-gpio"]
