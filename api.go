@@ -83,7 +83,7 @@ func GPIO(w http.ResponseWriter, r *http.Request) {
 		pin.Low()
 		err = json.NewEncoder(w).Encode("GPIO CLOSE")
 	}else {
-		err = json.NewEncoder(w).Encode("GPIO CLOSE")
+		err = json.NewEncoder(w).Encode("ERROR BAD NAME METHODE - MUST BE open OR close OR toogle")
 	}
  	if err != nil {
 		panic(err)
@@ -91,11 +91,6 @@ func GPIO(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println("send okey")
 }
-
-
-
-
-
 
 // our main function
 func main() {
@@ -111,10 +106,7 @@ func main() {
 	//WITH JSON
 	router.HandleFunc("/api/tryPostJSON", test).Methods("POST")
 
-
 	router.HandleFunc("/api/{methode}/{pos}", GPIO).Methods("GET")
-
-
 
 	// take care of fatal error
 	log.Fatal(http.ListenAndServe(":8001", router))
