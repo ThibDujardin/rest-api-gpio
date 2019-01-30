@@ -218,7 +218,7 @@ func GPIO(w http.ResponseWriter, r *http.Request) {
 	pinPosition := vars["pos"]
 	methodeCalling := vars["methode"]
 
-	log.Println("%S gpio number : %d",methodeCalling, pinPosition)
+	log.Printf("%s gpio number : %d",methodeCalling, pinPosition)
 	err := rpio.Open()
 	if err != nil {
 		panic(fmt.Sprint("unable to open gpio", err.Error()))
@@ -276,7 +276,7 @@ func main() {
 	router.HandleFunc("/api/open/{pos}", openGPIO).Methods("GET")
 	router.HandleFunc("/api/close/{pos}", closeGPIO).Methods("GET")
 	router.HandleFunc("/api/toogle/{pos}", toogleGPIO).Methods("GET")
-	router.HandleFunc("/api/{methode}/{pos}", toogleGPIO).Methods("GET")
+	router.HandleFunc("/api/{methode}/{pos}", GPIO).Methods("GET")
 
 
 	router.HandleFunc("/api/close21", closeGPIO21).Methods("GET")
