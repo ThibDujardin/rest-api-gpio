@@ -63,7 +63,7 @@ func openGPIO21(w http.ResponseWriter, r *http.Request) {
 
 	pin := rpio.Pin(21)
 	pin.Output()
-
+	pin.High()
 	err = json.NewEncoder(w).Encode("GPIOOPEN")
 	if err != nil {
 		fmt.Println(err)
@@ -85,9 +85,9 @@ func closeGPIO21(w http.ResponseWriter, r *http.Request) {
 
 	pin := rpio.Pin(21)
 	pin.Output()
-
-	pin.PullUp()
+	pin.Low()
 	err = json.NewEncoder(w).Encode("GPIOOPEN")
+
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -95,6 +95,28 @@ func closeGPIO21(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("send okey")
 }
 
+
+func toogleGPIO21(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+
+	fmt.Println("opening gpio")
+	err := rpio.Open()
+	if err != nil {
+		panic(fmt.Sprint("unable to open gpio", err.Error()))
+	}
+
+	defer rpio.Close()
+
+	pin := rpio.Pin(21)
+	pin.Output()
+	pin.Toggle()
+	err = json.NewEncoder(w).Encode("GPIOClose")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("send okey")
+}
 // our main function
 func main() {
 	// define new router
@@ -112,6 +134,7 @@ func main() {
 	router.HandleFunc("/api/open21", openGPIO21).Methods("GET")
 
 	router.HandleFunc("/api/close21", closeGPIO21).Methods("GET")
+	router.HandleFunc("/api/toogle21", toogleGPIO21).Methods("GET")
 
 	// take care of fatal error
 	log.Fatal(http.ListenAndServe(":8001", router))
